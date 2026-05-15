@@ -47,7 +47,7 @@ export default function ChatInput({
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Hỏi LexAI về pháp luật Việt Nam..."
+            placeholder="Nhập câu hỏi ở đây..."
             rows={1}
             disabled={disabled}
             className="scroll-thin flex-1 resize-none bg-transparent px-3 py-2 text-sm leading-relaxed text-slate-900 placeholder:text-slate-400 outline-none disabled:opacity-50 dark:text-slate-100 dark:placeholder:text-slate-500"

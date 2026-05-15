@@ -7,12 +7,12 @@ export declare class ChatController {
     private readonly ai;
     constructor(chat: ChatService, ai: AiClientService);
     sendMessage(dto: SendMessageDto, user: AuthUser): Promise<{
-        sessionId: string;
+        sessionId: number;
         userMessage: {
-            id: string;
+            id: number;
             role: string;
             createdAt: Date;
-            sessionId: string;
+            sessionId: number;
             content: string;
             citations: string | null;
             tokensUsed: number | null;
@@ -20,10 +20,10 @@ export declare class ChatController {
         };
         assistantMessage: {
             citations: import("../ai-client/dto/rag.dto").Citation[];
-            id: string;
+            id: number;
             role: string;
             createdAt: Date;
-            sessionId: string;
+            sessionId: number;
             content: string;
             tokensUsed: number | null;
             latencyMs: number | null;

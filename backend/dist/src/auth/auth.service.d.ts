@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 export interface JwtPayload {
-    sub: string;
+    sub: number;
     email: string;
     role: string;
 }
@@ -14,7 +14,7 @@ export declare class AuthService {
     register(dto: RegisterDto): Promise<{
         token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             fullName: string | null;
             role: string;
@@ -23,7 +23,7 @@ export declare class AuthService {
     login(dto: LoginDto): Promise<{
         token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             fullName: string | null;
             role: string;

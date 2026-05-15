@@ -8,7 +8,7 @@ export declare class AuthController {
     register(dto: RegisterDto): Promise<{
         token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             fullName: string | null;
             role: string;
@@ -17,7 +17,7 @@ export declare class AuthController {
     login(dto: LoginDto): Promise<{
         token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             fullName: string | null;
             role: string;

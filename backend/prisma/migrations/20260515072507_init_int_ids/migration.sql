@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "password_hash" TEXT NOT NULL,
     "full_name" TEXT,
@@ -13,8 +13,8 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT,
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER,
     "title" TEXT NOT NULL DEFAULT 'New chat',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -24,8 +24,8 @@ CREATE TABLE "sessions" (
 
 -- CreateTable
 CREATE TABLE "messages" (
-    "id" TEXT NOT NULL,
-    "session_id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "session_id" INTEGER NOT NULL,
     "role" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "citations" TEXT,

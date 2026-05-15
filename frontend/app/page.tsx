@@ -28,7 +28,7 @@ export default function HomePage() {
   const [authChecking, setAuthChecking] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [currentSessionId, setCurrentSessionId] = useState<number | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +66,7 @@ export default function HomePage() {
     if (!authChecking) refreshSessions();
   }, [authChecking, refreshSessions]);
 
-  async function handleSelect(id: string) {
+  async function handleSelect(id: number) {
     if (id === currentSessionId) return;
     setLoading(true);
     setError(null);
@@ -91,7 +91,7 @@ export default function HomePage() {
     setError(null);
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(id: number) {
     try {
       await api.deleteSession(id);
       if (id === currentSessionId) handleNew();
@@ -106,8 +106,8 @@ export default function HomePage() {
     setError(null);
 
     const tempUserMsg: ChatMessage = {
-      id: `temp-${Date.now()}`,
-      sessionId: currentSessionId || "",
+      id: -Date.now(),
+      sessionId: currentSessionId ?? 0,
       role: "user",
       content: question,
       createdAt: new Date().toISOString(),

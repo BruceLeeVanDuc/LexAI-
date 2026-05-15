@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number;
   email: string;
   fullName: string | null;
   role: string;
@@ -21,8 +21,8 @@ export interface Citation {
 }
 
 export interface ChatMessage {
-  id: string;
-  sessionId: string;
+  id: number;
+  sessionId: number;
   role: MessageRole;
   content: string;
   citations?: Citation[] | null;
@@ -36,8 +36,8 @@ export interface RetrievedChunk {
 }
 
 export interface ChatSession {
-  id: string;
-  userId: string | null;
+  id: number;
+  userId: number | null;
   title: string;
   createdAt: string;
   updatedAt: string;
@@ -46,7 +46,7 @@ export interface ChatSession {
 }
 
 export interface SendMessageResponse {
-  sessionId: string;
+  sessionId: number;
   userMessage: ChatMessage;
   assistantMessage: ChatMessage;
   retrievedChunks: RetrievedChunk[];

@@ -14,7 +14,7 @@ export class ChatService {
     private readonly sessions: SessionsService,
   ) {}
 
-  async sendMessage(dto: SendMessageDto, userId: string) {
+  async sendMessage(dto: SendMessageDto, userId: number) {
     // 1. Lấy hoặc tạo session
     let sessionId = dto.sessionId;
     if (!sessionId) {

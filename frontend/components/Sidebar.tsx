@@ -13,11 +13,11 @@ export default function Sidebar({
   onDelete,
 }: {
   sessions: ChatSession[];
-  currentId: string | null;
+  currentId: number | null;
   user: User | null;
-  onSelect: (id: string) => void;
+  onSelect: (id: number) => void;
   onNew: () => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }) {
   return (
     <aside className="flex h-full w-72 flex-col border-r border-slate-200/70 bg-gradient-to-b from-white to-slate-50 dark:border-slate-800 dark:from-slate-950 dark:to-slate-900">

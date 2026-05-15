@@ -3,7 +3,7 @@ export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     findByEmail(email: string): Promise<{
-        id: string;
+        id: number;
         email: string;
         passwordHash: string;
         fullName: string | null;
@@ -11,8 +11,8 @@ export declare class UsersService {
         createdAt: Date;
         lastLoginAt: Date | null;
     } | null>;
-    findById(id: string): Promise<{
-        id: string;
+    findById(id: number): Promise<{
+        id: number;
         email: string;
         passwordHash: string;
         fullName: string | null;
@@ -25,7 +25,7 @@ export declare class UsersService {
         passwordHash: string;
         fullName?: string;
     }): Promise<{
-        id: string;
+        id: number;
         email: string;
         passwordHash: string;
         fullName: string | null;
@@ -33,8 +33,8 @@ export declare class UsersService {
         createdAt: Date;
         lastLoginAt: Date | null;
     }>;
-    touchLastLogin(id: string): Promise<{
-        id: string;
+    touchLastLogin(id: number): Promise<{
+        id: number;
         email: string;
         passwordHash: string;
         fullName: string | null;

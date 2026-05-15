@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Delete, Post, Body, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { SessionsService } from './sessions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
@@ -20,12 +29,18 @@ export class SessionsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.sessions.findOne(id, user.id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.sessions.remove(id, user.id);
   }
 }

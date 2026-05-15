@@ -2,51 +2,51 @@ import { PrismaService } from '../prisma/prisma.service';
 export declare class SessionsService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(title?: string, userId?: string): Promise<{
-        id: string;
+    create(title?: string, userId?: number): Promise<{
+        id: number;
         createdAt: Date;
         title: string;
         updatedAt: Date;
-        userId: string | null;
+        userId: number | null;
     }>;
-    findAll(userId: string): Promise<({
+    findAll(userId: number): Promise<({
         _count: {
             messages: number;
         };
     } & {
-        id: string;
+        id: number;
         createdAt: Date;
         title: string;
         updatedAt: Date;
-        userId: string | null;
+        userId: number | null;
     })[]>;
-    findOne(id: string, userId: string): Promise<{
+    findOne(id: number, userId: number): Promise<{
         messages: {
-            id: string;
+            id: number;
             role: string;
             createdAt: Date;
-            sessionId: string;
+            sessionId: number;
             content: string;
             citations: string | null;
             tokensUsed: number | null;
             latencyMs: number | null;
         }[];
     } & {
-        id: string;
+        id: number;
         createdAt: Date;
         title: string;
         updatedAt: Date;
-        userId: string | null;
+        userId: number | null;
     }>;
-    assertOwner(id: string, userId: string): Promise<void>;
-    touch(id: string): Promise<{
-        id: string;
+    assertOwner(id: number, userId: number): Promise<void>;
+    touch(id: number): Promise<{
+        id: number;
         createdAt: Date;
         title: string;
         updatedAt: Date;
-        userId: string | null;
+        userId: number | null;
     }>;
-    remove(id: string, userId: string): Promise<{
+    remove(id: number, userId: number): Promise<{
         deleted: boolean;
     }>;
 }

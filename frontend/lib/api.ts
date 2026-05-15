@@ -49,7 +49,7 @@ export const api = {
   me: () => request<User>("/auth/me"),
 
   // Chat
-  sendMessage: (question: string, sessionId?: string) =>
+  sendMessage: (question: string, sessionId?: number) =>
     request<SendMessageResponse>("/chat", {
       method: "POST",
       body: JSON.stringify({ question, sessionId }),
@@ -57,7 +57,7 @@ export const api = {
 
   // Sessions
   listSessions: () => request<ChatSession[]>("/sessions"),
-  getSession: (id: string) => request<ChatSession>(`/sessions/${id}`),
-  deleteSession: (id: string) =>
+  getSession: (id: number) => request<ChatSession>(`/sessions/${id}`),
+  deleteSession: (id: number) =>
     request<{ deleted: boolean }>(`/sessions/${id}`, { method: "DELETE" }),
 };

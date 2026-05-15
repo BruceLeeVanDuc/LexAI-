@@ -9,7 +9,7 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async findById(id: string) {
+  async findById(id: number) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User không tồn tại');
     return user;
@@ -21,7 +21,7 @@ export class UsersService {
     return this.prisma.user.create({ data });
   }
 
-  async touchLastLogin(id: string) {
+  async touchLastLogin(id: number) {
     return this.prisma.user.update({
       where: { id },
       data: { lastLoginAt: new Date() },

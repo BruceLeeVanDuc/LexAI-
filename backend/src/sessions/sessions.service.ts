@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(title?: string, userId?: string) {
+  async create(title?: string, userId?: number) {
     return this.prisma.session.create({
       data: {
         title: title ?? 'New chat',
@@ -14,7 +14,7 @@ export class SessionsService {
     });
   }
 
-  async findAll(userId: string) {
+  async findAll(userId: number) {
     return this.prisma.session.findMany({
       where: { userId },
       orderBy: { updatedAt: 'desc' },
@@ -22,7 +22,7 @@ export class SessionsService {
     });
   }
 
-  async findOne(id: string, userId: string) {
+  async findOne(id: number, userId: number) {
     const session = await this.prisma.session.findUnique({
       where: { id },
       include: { messages: { orderBy: { createdAt: 'asc' } } },
@@ -34,7 +34,7 @@ export class SessionsService {
     return session;
   }
 
-  async assertOwner(id: string, userId: string) {
+  async assertOwner(id: number, userId: number) {
     const s = await this.prisma.session.findUnique({
       where: { id },
       select: { userId: true },
@@ -45,14 +45,14 @@ export class SessionsService {
     }
   }
 
-  async touch(id: string) {
+  async touch(id: number) {
     return this.prisma.session.update({
       where: { id },
       data: { updatedAt: new Date() },
     });
   }
 
-  async remove(id: string, userId: string) {
+  async remove(id: number, userId: number) {
     await this.assertOwner(id, userId);
     await this.prisma.session.delete({ where: { id } });
     return { deleted: true };

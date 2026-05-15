@@ -1,4 +1,5 @@
-import { IsOptional, IsString, IsUUID, MinLength, MaxLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, IsPositive, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class SendMessageDto {
   @IsString()
@@ -7,6 +8,8 @@ export class SendMessageDto {
   question!: string;
 
   @IsOptional()
-  @IsUUID()
-  sessionId?: string;
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  sessionId?: number;
 }

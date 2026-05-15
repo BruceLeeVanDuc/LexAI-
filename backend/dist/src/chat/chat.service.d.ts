@@ -8,13 +8,13 @@ export declare class ChatService {
     private readonly sessions;
     private readonly logger;
     constructor(prisma: PrismaService, ai: AiClientService, sessions: SessionsService);
-    sendMessage(dto: SendMessageDto, userId: string): Promise<{
-        sessionId: string;
+    sendMessage(dto: SendMessageDto, userId: number): Promise<{
+        sessionId: number;
         userMessage: {
-            id: string;
+            id: number;
             role: string;
             createdAt: Date;
-            sessionId: string;
+            sessionId: number;
             content: string;
             citations: string | null;
             tokensUsed: number | null;
@@ -22,10 +22,10 @@ export declare class ChatService {
         };
         assistantMessage: {
             citations: import("../ai-client/dto/rag.dto").Citation[];
-            id: string;
+            id: number;
             role: string;
             createdAt: Date;
-            sessionId: string;
+            sessionId: number;
             content: string;
             tokensUsed: number | null;
             latencyMs: number | null;

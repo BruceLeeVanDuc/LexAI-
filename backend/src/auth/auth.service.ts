@@ -8,7 +8,7 @@ import { LoginDto } from './dto/login.dto';
 const SALT_ROUNDS = 10;
 
 export interface JwtPayload {
-  sub: string; // user id
+  sub: number; // user id
   email: string;
   role: string;
 }
@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   private buildResponse(user: {
-    id: string;
+    id: number;
     email: string;
     fullName: string | null;
     role: string;
