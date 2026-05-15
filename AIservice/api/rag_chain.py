@@ -251,18 +251,10 @@ def run_rag(
     # 1. Retrieve tài liệu liên quan
     docs = retrieve(question, top_k=top_k)
 
-    # 2. Nếu không có tài liệu thì không gọi LLM để tránh bịa
-    if not docs:
-        return {
-            "answer": "Chưa tìm thấy căn cứ phù hợp trong dữ liệu để trả lời câu hỏi này.",
-            "citations": [],
-            "retrieved_chunks": [],
-        }
-
-    # 3. Format context
+    # 2. Format context (rỗng nếu không có docs — LLM sẽ tự từ chối theo system prompt)
     context = format_docs(docs)
 
-    # 4. Gọi LLM
+    # 3. Gọi LLM
     llm = get_llm()
     messages = build_messages(question, context, history)
 
@@ -275,18 +267,18 @@ def run_rag(
             "retrieved_chunks": _build_retrieved_chunks(docs),
         }
 
-    # 5. Parse JSON output
+    # 4. Parse JSON output
     parsed = _safe_parse_json(_coerce_to_text(response.content))
 
     answer = parsed.get("content", "")
     if not answer:
         answer = "Chưa tìm thấy căn cứ phù hợp trong dữ liệu để trả lời câu hỏi này."
 
-    # 6. Lọc citations hợp lệ
+    # 5. Lọc citations hợp lệ (docs rỗng ⇒ lookup rỗng ⇒ citations sẽ bị lọc về [])
     citations_raw = parsed.get("citations", [])
     citations = _filter_citations(citations_raw, docs)
 
-    # 7. Build chunks để trả về frontend/debug
+    # 6. Build chunks để trả về frontend/debug
     chunks = _build_retrieved_chunks(docs)
 
     return {
