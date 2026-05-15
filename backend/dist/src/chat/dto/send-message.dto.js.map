@@ -1,0 +1,1 @@
+{"version":3,"file":"send-message.dto.js","sourceRoot":"","sources":["../../../../src/chat/dto/send-message.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAAqF;AAErF,MAAa,cAAc;IAIzB,QAAQ,CAAU;IAIlB,SAAS,CAAU;CACpB;AATD,wCASC;AALC;IAHC,IAAA,0BAAQ,GAAE;IACV,IAAA,2BAAS,EAAC,CAAC,CAAC;IACZ,IAAA,2BAAS,EAAC,IAAI,CAAC;;gDACE;AAIlB;IAFC,IAAA,4BAAU,GAAE;IACZ,IAAA,wBAAM,GAAE;;iDACU"}

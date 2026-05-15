@@ -1,0 +1,57 @@
+// Schema cho hệ thống Chatbot Pháp Luật
+// - User: tạm thời chưa dùng, sẽ active ở Sprint 3 (auth)
+// - Session: 1 phiên chat, có nhiều messages
+// - Message: từng tin nhắn user/assistant
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  fullName     String?  @map("full_name")
+  role         String   @default("user") // 'user' | 'admin'
+  createdAt    DateTime @default(now()) @map("created_at")
+  lastLoginAt  DateTime? @map("last_login_at")
+
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String?  @map("user_id") // nullable cho Sprint 2 (chưa auth)
+  title     String   @default("New chat")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  sessionId   String   @map("session_id")
+  role        String // 'user' | 'assistant'
+  content     String
+  citations   String? // JSON string (SQLite không có native JSON)
+  tokensUsed  Int?     @map("tokens_used")
+  latencyMs   Int?     @map("latency_ms")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("messages")
+}

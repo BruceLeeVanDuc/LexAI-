@@ -1,0 +1,21 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Đường dẫn dữ liệu
+DATA_TO_ADD_PATH = os.path.join(BASE_DIR, "data", "docx_input")
+DATA_FINAL_PATH = os.path.join(BASE_DIR, "data", "docx_processed")
+
+# ChromaDB
+CHROMA_PATH = os.path.join(BASE_DIR, "chroma_db")
+COLLECTION_NAME = "phapluat"
+
+# Embedding model
+EMBEDDING_MODEL = "intfloat/multilingual-e5-large"
+
+# LLM
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+LLM_MODEL_NAME = "gemini-2.5-flash"
