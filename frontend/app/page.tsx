@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
+import TopBar from "@/components/TopBar";
 import ChatWindow from "@/components/ChatWindow";
 import ChatInput from "@/components/ChatInput";
 import { api } from "@/lib/api";
@@ -148,32 +149,35 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50 dark:bg-slate-950">
-      <Sidebar
-        sessions={sessions}
-        currentId={currentSessionId}
-        user={user}
-        onSelect={handleSelect}
-        onNew={handleNew}
-        onDelete={handleDelete}
-      />
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-slate-50 dark:bg-slate-950">
+      <TopBar user={user} />
 
-      <main className="flex min-w-0 flex-1 flex-col bg-white dark:bg-slate-900">
-        {error && (
-          <div className="flex items-center justify-between gap-3 border-b border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-300">
-            <span className="truncate">{error}</span>
-            <button
-              onClick={() => setError(null)}
-              className="shrink-0 rounded px-1.5 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-900/40"
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-          </div>
-        )}
-        <ChatWindow messages={messages} loading={loading} />
-        <ChatInput onSend={handleSend} disabled={loading} />
-      </main>
+      <div className="flex min-h-0 flex-1">
+        <Sidebar
+          sessions={sessions}
+          currentId={currentSessionId}
+          onSelect={handleSelect}
+          onNew={handleNew}
+          onDelete={handleDelete}
+        />
+
+        <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-gradient-to-br from-slate-100 via-indigo-50/60 to-violet-100/50 dark:from-slate-900 dark:via-indigo-950/40 dark:to-violet-950/30">
+          {error && (
+            <div className="flex items-center justify-between gap-3 border-b border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-300">
+              <span className="truncate">{error}</span>
+              <button
+                onClick={() => setError(null)}
+                className="shrink-0 rounded px-1.5 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-900/40"
+                aria-label="Đóng"
+              >
+                ×
+              </button>
+            </div>
+          )}
+          <ChatWindow messages={messages} loading={loading} />
+          <ChatInput onSend={handleSend} disabled={loading} />
+        </main>
+      </div>
     </div>
   );
 }

@@ -47,13 +47,16 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
 const users_service_1 = require("../users/users.service");
+const prisma_service_1 = require("../prisma/prisma.service");
 const SALT_ROUNDS = 10;
 let AuthService = class AuthService {
     users;
     jwt;
-    constructor(users, jwt) {
+    prisma;
+    constructor(users, jwt, prisma) {
         this.users = users;
         this.jwt = jwt;
+        this.prisma = prisma;
     }
     async register(dto) {
         const passwordHash = await bcrypt.hash(dto.password, SALT_ROUNDS);
@@ -73,6 +76,21 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Email hoặc mật khẩu không đúng');
         await this.users.touchLastLogin(user.id);
         return this.buildResponse(user);
+    }
+    async changePassword(userId, dto) {
+        const user = await this.users.findById(userId);
+        const valid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+        if (!valid)
+            throw new common_1.UnauthorizedException('Mật khẩu hiện tại không đúng');
+        if (dto.currentPassword === dto.newPassword) {
+            throw new common_1.BadRequestException('Mật khẩu mới phải khác mật khẩu hiện tại');
+        }
+        const passwordHash = await bcrypt.hash(dto.newPassword, SALT_ROUNDS);
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: { passwordHash },
+        });
+        return { success: true };
     }
     buildResponse(user) {
         const payload = {
@@ -96,6 +114,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        prisma_service_1.PrismaService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

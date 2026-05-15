@@ -48,6 +48,12 @@ export const api = {
 
   me: () => request<User>("/auth/me"),
 
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ success: boolean }>("/auth/password", {
+      method: "PATCH",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    }),
+
   // Chat
   sendMessage: (question: string, sessionId?: number) =>
     request<SendMessageResponse>("/chat", {

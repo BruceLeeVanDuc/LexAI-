@@ -1,7 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 export interface JwtPayload {
     sub: number;
     email: string;
@@ -10,7 +12,8 @@ export interface JwtPayload {
 export declare class AuthService {
     private readonly users;
     private readonly jwt;
-    constructor(users: UsersService, jwt: JwtService);
+    private readonly prisma;
+    constructor(users: UsersService, jwt: JwtService, prisma: PrismaService);
     register(dto: RegisterDto): Promise<{
         token: string;
         user: {
@@ -28,6 +31,9 @@ export declare class AuthService {
             fullName: string | null;
             role: string;
         };
+    }>;
+    changePassword(userId: number, dto: ChangePasswordDto): Promise<{
+        success: boolean;
     }>;
     private buildResponse;
 }

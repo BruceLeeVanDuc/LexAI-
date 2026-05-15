@@ -38,7 +38,7 @@ export default function ChatInput({
   return (
     <form
       onSubmit={submit}
-      className="border-t border-slate-200/70 bg-gradient-to-b from-transparent to-slate-50/80 px-4 py-4 dark:border-slate-800 dark:to-slate-950/80"
+      className="border-t border-slate-200/60 bg-transparent px-4 py-4 dark:border-slate-800/60"
     >
       <div className="mx-auto max-w-3xl">
         <div className="group relative flex items-end gap-2 rounded-2xl border border-slate-300/70 bg-white p-1.5 shadow-sm transition focus-within:border-indigo-400 focus-within:shadow-lg focus-within:shadow-indigo-500/10 dark:border-slate-700 dark:bg-slate-900 dark:focus-within:border-indigo-500">
