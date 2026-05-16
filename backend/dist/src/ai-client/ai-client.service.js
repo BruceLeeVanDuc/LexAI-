@@ -27,15 +27,16 @@ let AiClientService = AiClientService_1 = class AiClientService {
         this.aiUrl = this.config.get('AI_SERVICE_URL', 'http://localhost:8000');
         this.timeoutMs = Number(this.config.get('AI_SERVICE_TIMEOUT_MS', 60000));
     }
-    async rag(req) {
+    async rag(req, provider = 'gemini') {
+        const path = provider === 'groq' ? '/rag/groq' : '/rag/gemini';
         try {
-            const { data } = await (0, rxjs_1.firstValueFrom)(this.http.post(`${this.aiUrl}/rag`, req, {
+            const { data } = await (0, rxjs_1.firstValueFrom)(this.http.post(`${this.aiUrl}${path}`, req, {
                 timeout: this.timeoutMs,
             }));
             return data;
         }
         catch (err) {
-            this.logger.error(`AI service lỗi: ${err.message}`, err.stack);
+            this.logger.error(`AI service [${provider}] lỗi: ${err.message}`, err.stack);
             throw new common_1.ServiceUnavailableException('AI service không phản hồi');
         }
     }

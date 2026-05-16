@@ -1,4 +1,4 @@
-import type { AuthResponse, ChatSession, SendMessageResponse, User } from "./types";
+import type { AuthResponse, ChatSession, LlmProvider, SendMessageResponse, User } from "./types";
 import { getToken, clearToken } from "./auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
@@ -55,10 +55,10 @@ export const api = {
     }),
 
   // Chat
-  sendMessage: (question: string, sessionId?: number) =>
+  sendMessage: (question: string, sessionId?: number, provider?: LlmProvider) =>
     request<SendMessageResponse>("/chat", {
       method: "POST",
-      body: JSON.stringify({ question, sessionId }),
+      body: JSON.stringify({ question, sessionId, provider }),
     }),
 
   // Sessions

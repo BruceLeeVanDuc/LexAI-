@@ -1,19 +1,33 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ChevronDown,
   KeyRound,
   LogOut,
   Scale,
+  Sparkles,
+  Zap,
   User as UserIcon,
 } from "lucide-react";
-import type { User } from "@/lib/types";
+import type { LlmProvider, User } from "@/lib/types";
 import { clearToken } from "@/lib/auth";
 import ChangePasswordModal from "./ChangePasswordModal";
 
-export default function TopBar({ user }: { user: User | null }) {
+const PROVIDER_LABEL: Record<LlmProvider, string> = {
+  gemini: "Gemini 2.5 Flash",
+  groq: "Llama 3.3 70B · Groq",
+};
+
+export default function TopBar({
+  user,
+  provider,
+}: {
+  user: User | null;
+  provider?: LlmProvider;
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pwdOpen, setPwdOpen] = useState(false);
@@ -53,6 +67,34 @@ export default function TopBar({ user }: { user: User | null }) {
             </p>
           </div>
         </div>
+
+        {/* Model switcher (chỉ hiển thị khi đang ở trang chat) */}
+        {provider && (
+          <div className="hidden items-center gap-1 rounded-full border border-slate-200 bg-white p-0.5 text-xs font-medium shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:flex">
+            <Link
+              href="/chat/gemini"
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 transition ${
+                provider === "gemini"
+                  ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
+                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              {PROVIDER_LABEL.gemini}
+            </Link>
+            <Link
+              href="/chat/groq"
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 transition ${
+                provider === "groq"
+                  ? "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300"
+                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+              }`}
+            >
+              <Zap className="h-3.5 w-3.5" />
+              {PROVIDER_LABEL.groq}
+            </Link>
+          </div>
+        )}
 
         {/* Right side */}
         <div className="flex items-center gap-2">

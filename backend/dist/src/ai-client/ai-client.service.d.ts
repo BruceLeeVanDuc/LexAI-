@@ -8,6 +8,6 @@ export declare class AiClientService {
     private readonly aiUrl;
     private readonly timeoutMs;
     constructor(http: HttpService, config: ConfigService);
-    rag(req: RagRequest): Promise<RagResponse>;
+    rag(req: RagRequest, provider?: 'gemini' | 'groq'): Promise<RagResponse>;
     health(): Promise<any>;
 }

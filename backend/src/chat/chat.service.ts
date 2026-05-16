@@ -31,10 +31,9 @@ export class ChatService {
     });
 
     // 3. Gọi AI service — chỉ gửi câu hỏi, không gửi history
+    const provider = dto.provider ?? 'gemini';
     const start = Date.now();
-    const ragRes = await this.ai.rag({
-      question: dto.question,
-    });
+    const ragRes = await this.ai.rag({ question: dto.question }, provider);
     const latencyMs = Date.now() - start;
 
     // 5. Lưu câu trả lời của assistant

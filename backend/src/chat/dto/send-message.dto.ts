@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsPositive, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsIn, IsInt, IsOptional, IsPositive, IsString, MaxLength, MinLength } from 'class-validator';
+
+export type LlmProvider = 'gemini' | 'groq';
 
 export class SendMessageDto {
   @IsString()
@@ -12,4 +14,8 @@ export class SendMessageDto {
   @IsInt()
   @IsPositive()
   sessionId?: number;
+
+  @IsOptional()
+  @IsIn(['gemini', 'groq'])
+  provider?: LlmProvider;
 }

@@ -48,8 +48,7 @@ def health():
         return {"status": "error", "detail": str(e)}
 
 
-@app.post("/rag", response_model=RagResponse)
-def rag_endpoint(req: RagRequest):
+def _run_and_wrap(req: RagRequest, provider: str) -> RagResponse:
     if not req.question.strip():
         raise HTTPException(status_code=400, detail="question không được để trống")
 
@@ -59,13 +58,14 @@ def rag_endpoint(req: RagRequest):
             question=req.question,
             history=req.history,
             top_k=req.top_k,
+            provider=provider,
         )
     except Exception as e:
-        logger.exception("RAG pipeline lỗi")
+        logger.exception(f"RAG pipeline ({provider}) lỗi")
         raise HTTPException(status_code=500, detail=str(e))
 
     latency_ms = int((time.time() - start) * 1000)
-    logger.info(f"RAG xong trong {latency_ms}ms — câu hỏi: {req.question[:50]}...")
+    logger.info(f"RAG [{provider}] xong trong {latency_ms}ms — câu hỏi: {req.question[:50]}...")
 
     return RagResponse(
         answer=result["answer"],
@@ -73,3 +73,19 @@ def rag_endpoint(req: RagRequest):
         retrieved_chunks=result["retrieved_chunks"],
         latency_ms=latency_ms,
     )
+
+
+@app.post("/rag", response_model=RagResponse)
+def rag_endpoint(req: RagRequest):
+    # Giữ endpoint cũ để không break BE — mặc định Gemini
+    return _run_and_wrap(req, provider="gemini")
+
+
+@app.post("/rag/gemini", response_model=RagResponse)
+def rag_gemini(req: RagRequest):
+    return _run_and_wrap(req, provider="gemini")
+
+
+@app.post("/rag/groq", response_model=RagResponse)
+def rag_groq(req: RagRequest):
+    return _run_and_wrap(req, provider="groq")

@@ -37,10 +37,9 @@ let ChatService = ChatService_1 = class ChatService {
         const userMsg = await this.prisma.message.create({
             data: { sessionId, role: 'user', content: dto.question },
         });
+        const provider = dto.provider ?? 'gemini';
         const start = Date.now();
-        const ragRes = await this.ai.rag({
-            question: dto.question,
-        });
+        const ragRes = await this.ai.rag({ question: dto.question }, provider);
         const latencyMs = Date.now() - start;
         const assistantMsg = await this.prisma.message.create({
             data: {

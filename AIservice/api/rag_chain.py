@@ -3,35 +3,49 @@ import re
 from typing import List, Optional
 
 from langchain_core.documents import Document
+from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from config.config import GOOGLE_API_KEY, LLM_MODEL_NAME
+from config.config import (
+    GOOGLE_API_KEY,
+    LLM_MODEL_NAME,
+    GROQ_API_KEY,
+    GROQ_MODEL_NAME,
+)
 from api.retriever import retrieve
 from api.schemas import ChatMessage, Citation, RetrievedChunk
 
 
-_llm = None
+_llms: dict[str, BaseChatModel] = {}
 
 
-def get_llm() -> ChatGoogleGenerativeAI:
-    """Singleton LLM."""
-    global _llm
+def get_llm(provider: str = "gemini") -> BaseChatModel:
+    """Singleton LLM theo provider ('gemini' hoặc 'groq')."""
+    if provider in _llms:
+        return _llms[provider]
 
-    if _llm is None:
+    if provider == "groq":
+        if not GROQ_API_KEY:
+            raise ValueError("GROQ_API_KEY không được tìm thấy trong .env")
+        from langchain_groq import ChatGroq
+        _llms[provider] = ChatGroq(
+            model=GROQ_MODEL_NAME,
+            temperature=0.2,
+            groq_api_key=GROQ_API_KEY,
+        )
+    elif provider == "gemini":
         if not GOOGLE_API_KEY:
             raise ValueError("GOOGLE_API_KEY không được tìm thấy trong .env")
-
-        # response_mime_type đã được đổi vị trí ở langchain-google-genai mới;
-        # tránh truyền qua model_kwargs để không vỡ Pydantic. System prompt + parser
-        # fallback bên dưới đã đủ để ép JSON.
-        _llm = ChatGoogleGenerativeAI(
+        _llms[provider] = ChatGoogleGenerativeAI(
             model=LLM_MODEL_NAME,
             temperature=0.2,
             google_api_key=GOOGLE_API_KEY,
         )
+    else:
+        raise ValueError(f"Provider không hỗ trợ: {provider!r} (chỉ chấp nhận 'gemini' | 'groq')")
 
-    return _llm
+    return _llms[provider]
 
 
 def format_docs(docs: List[Document]) -> str:
@@ -245,6 +259,7 @@ def run_rag(
     question: str,
     history: Optional[List[ChatMessage]] = None,
     top_k: int = 5,
+    provider: str = "gemini",
 ):
     """Chạy RAG pipeline đầy đủ → trả về dict {answer, citations, retrieved_chunks}."""
 
@@ -254,8 +269,8 @@ def run_rag(
     # 2. Format context (rỗng nếu không có docs — LLM sẽ tự từ chối theo system prompt)
     context = format_docs(docs)
 
-    # 3. Gọi LLM
-    llm = get_llm()
+    # 3. Gọi LLM theo provider
+    llm = get_llm(provider)
     messages = build_messages(question, context, history)
 
     try:

@@ -15,6 +15,7 @@ const class_validator_1 = require("class-validator");
 class SendMessageDto {
     question;
     sessionId;
+    provider;
 }
 exports.SendMessageDto = SendMessageDto;
 __decorate([
@@ -30,4 +31,9 @@ __decorate([
     (0, class_validator_1.IsPositive)(),
     __metadata("design:type", Number)
 ], SendMessageDto.prototype, "sessionId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsIn)(['gemini', 'groq']),
+    __metadata("design:type", String)
+], SendMessageDto.prototype, "provider", void 0);
 //# sourceMappingURL=send-message.dto.js.map

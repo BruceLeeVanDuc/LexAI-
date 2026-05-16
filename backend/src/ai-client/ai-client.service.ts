@@ -18,16 +18,20 @@ export class AiClientService {
     this.timeoutMs = Number(this.config.get('AI_SERVICE_TIMEOUT_MS', 60000));
   }
 
-  async rag(req: RagRequest): Promise<RagResponse> {
+  async rag(
+    req: RagRequest,
+    provider: 'gemini' | 'groq' = 'gemini',
+  ): Promise<RagResponse> {
+    const path = provider === 'groq' ? '/rag/groq' : '/rag/gemini';
     try {
       const { data } = await firstValueFrom(
-        this.http.post<RagResponse>(`${this.aiUrl}/rag`, req, {
+        this.http.post<RagResponse>(`${this.aiUrl}${path}`, req, {
           timeout: this.timeoutMs,
         }),
       );
       return data;
     } catch (err: any) {
-      this.logger.error(`AI service lỗi: ${err.message}`, err.stack);
+      this.logger.error(`AI service [${provider}] lỗi: ${err.message}`, err.stack);
       throw new ServiceUnavailableException('AI service không phản hồi');
     }
   }
